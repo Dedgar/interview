@@ -3,33 +3,32 @@ package main
 import "fmt"
 
 var (
-	nums = map[string]int{
-		"I":    1,
-		"II":   2,
-		"III":  3,
-		"IV":   4,
-		"V":    5,
-		"VI":   6,
-		"VII":  7,
-		"VIII": 8,
-		"IX":   9,
-		"X":    10,
-		"L":    50,
-		"C":    100,
-		"D":    500,
-		"M":    1000,
+	nums = map[byte]int{
+		'I': 1,
+		'V': 5,
+		'X': 10,
+		'L': 50,
+		'C': 100,
+		'D': 500,
+		'M': 1000,
 	}
 )
 
 func romanToInt(s string) int {
 	converted := 0
-	for _, n := range s {
-		if i, ok := nums[n]; ok {
+	l := len(s) - 1
+
+	for i := 0; i < l; i++ {
+		if nums[s[i]] < nums[s[i+1]] {
+			converted -= nums[s[i]]
+		} else {
+			converted += nums[s[i]]
 		}
-		converted += i
 	}
+	return converted + nums[s[l]]
 }
 
 func main() {
 	fmt.Println(romanToInt("MCMXCIV"))
+	fmt.Println(romanToInt("V"))
 }
