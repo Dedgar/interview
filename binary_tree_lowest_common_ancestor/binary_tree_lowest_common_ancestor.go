@@ -12,38 +12,27 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-func checkNodes(found, root, p, q *TreeNode) bool {
-	if root == nil {
-		return false
-	}
-
-	/*
-		if checkNodes(found, root.Left, p, q) || checkNodes(found, root.Right, p, q) {
-			*found = *root
-			fmt.Println("child val matches", root.Val, p.Val, q.Val)
-			return true
-		}
-	*/
-
-	if root.Val == p.Val || root.Val == q.Val {
-		*found = *root
-		fmt.Println("root val matches", root.Val, p.Val, q.Val)
-		return true
-	}
-
-	return false
-}
-
 func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
-	if root == nil {
-		return &TreeNode{}
+	switch {
+	case root == nil:
+		return nil
+	case root == p || root == q:
+		return root
 	}
 
-	found := &TreeNode{}
+	left := lowestCommonAncestor(root.Left, p, q)
+	right := lowestCommonAncestor(root.Right, p, q)
 
-	checkNodes(found, root, p, q)
+	switch {
+	case left != nil && right != nil:
+		return root
+	case left == nil:
+		return right
+	case right == nil:
+		return left
+	}
 
-	return found
+	return nil
 }
 
 func (n *TreeNode) json() {
