@@ -3,34 +3,29 @@ package main
 import "fmt"
 
 func rotate(nums []int, k int) {
-	rotated := make([]int, len(nums))
-	aLen := len(nums) - 1
-
-	// if each array item index = array[index + shift]
-	// if the item is over len(array): (item + k) - len(array) - 1
-	switch {
-	case aLen == 0:
+	aLen := len(nums)
+	if aLen <= 1 {
+		fmt.Println("aLen is short")
 		fmt.Println(nums)
 		return
 	}
+	mod := aLen - (k % aLen)
+	fmt.Println("aLen, k, mod", aLen, k, mod)
 
-	for i, v := range nums {
-		switch {
-		case i+k <= aLen:
-			rotated[i+k] = v
-			continue
-		case i+k > aLen:
-			rotated[i+k-aLen-1] = v
-			continue
-		}
-	}
-	nums = rotated
+	begin := nums[mod:]
+	end := nums[:mod]
+
+	begin = append(begin, end...)
+
+	copy(nums, begin)
+
 	fmt.Println(nums)
 }
 
 func main() {
 	rotate([]int{1}, 1)
 	rotate([]int{1, 2}, 1)
+	rotate([]int{1, 2}, 5)
 	rotate([]int{1, 2, 3, 4, 5}, 1)
 	rotate([]int{1, 2, 3, 4, 5}, 2)
 	rotate([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, 8)
